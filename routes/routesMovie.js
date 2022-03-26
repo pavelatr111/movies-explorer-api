@@ -15,7 +15,7 @@ router.post('/', celebrate({
     thumbnail: Joi.string().required().pattern(/https?:\/\/(www\.)?[-\w@:%\\.\\+~#=]{1,256}\.[a-z0-9()]{1,6}\b([-\w()@:%\\.\\+~#=//?&]*)/i),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    movieId: Joi.required(), //! !!!!
+    movieId: Joi.number().required(),
   }),
 }), createMovie);
 
