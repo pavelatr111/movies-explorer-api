@@ -1,9 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const { errors } = require('celebrate');
 const auth = require('./middleware/auth');
 const { requestLogger, errorLogger } = require('./middleware/logger');
+const NotFoundError = require('./errors/not-found-error');
 
 const app = express();
 const { PORT = 3000 } = process.env;
@@ -11,7 +14,8 @@ const { PORT = 3000 } = process.env;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+// mongoose.connect('mongodb://localhost:27017/bitfilmsdb'
+mongoose.connect(process.env.DATABASE_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -19,11 +23,17 @@ app.use(cookieParser());
 
 app.use(requestLogger);
 
-app.use('/', require('./routes/routesAuth'));
-app.use('/users', auth, require('./routes/routesUser'));
-app.use('/movies', auth, require('./routes/routesMovie'));
+app.use(require('./routes/routesAuth'));
+app.use(auth, require('./routes/routesUser'));
+app.use(auth, require('./routes/routesMovie'));
+
+app.use('*', (req, res, next) => {
+  next(new NotFoundError('Страница по указоному адресу не найдена'));
+});
 
 app.use(errorLogger); // подключаем логгер ошибок
+
+app.use(errors({ message: 'error validation' }));
 
 app.use((err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500

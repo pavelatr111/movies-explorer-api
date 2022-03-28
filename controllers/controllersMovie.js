@@ -16,7 +16,7 @@ module.exports.createMovie = async (req, res, next) => {
   try {
     const {
       country, director, duration, year, description,
-      image, trailerLink, nameRU, nameEN, thumbnail,
+      image, trailerLink, nameRU, nameEN, thumbnail, movieId,
     } = req.body;
     const createMovie = await Movie.create({
       country,
@@ -29,6 +29,7 @@ module.exports.createMovie = async (req, res, next) => {
       nameRU,
       nameEN,
       thumbnail,
+      movieId,
       owner: req.user._id,
     });
     res.status(200).send(createMovie);

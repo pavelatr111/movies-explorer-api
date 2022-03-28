@@ -18,14 +18,12 @@ module.exports.getUser = async (req, res, next) => {
       next(new NotFoundError('Нет пользователя с таким id'));
     }
   } catch (err) {
-    if (err.name === 'CastError') {
-      next(new DataError('Переданы некорректные id'));
-    } else {
-      next(err);
-    }
+    // if (err.name === 'CastError') {
+    //   next(new DataError('Переданы некорректные id'));
+    // } else {
+    next(err);
   }
 };
-
 module.exports.updateUser = async (req, res, next) => {
   try {
     const userUpdate = await User.findByIdAndUpdate(
@@ -52,9 +50,9 @@ module.exports.updateUser = async (req, res, next) => {
 };
 module.exports.createUser = (req, res, next) => {
   const { email, password, name } = req.body;
-  if (!email || !password) {
-    next(new AuthorizationError('Не верный email или пароль'));
-  }
+  // if (!email || !password) {
+  //   next(new AuthorizationError('Не верный email или пароль'));
+  // }
   bcrypt.hash(password, saltRounds)
     .then((hash) => {
       User.create({
