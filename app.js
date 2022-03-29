@@ -8,6 +8,8 @@ const auth = require('./middleware/auth');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const NotFoundError = require('./errors/not-found-error');
 
+const { DATABASE_URL, NODE_ENV } = process.env;
+
 const app = express();
 const { PORT = 3000 } = process.env;
 
@@ -15,7 +17,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // mongoose.connect('mongodb://localhost:27017/bitfilmsdb'
-mongoose.connect(process.env.DATABASE_URL, {
+mongoose.connect(NODE_ENV === 'production' ? DATABASE_URL : 'mongodb://localhost:27017/bitfilmsdb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
