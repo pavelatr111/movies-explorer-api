@@ -7,6 +7,7 @@ const { errors } = require('celebrate');
 const auth = require('./middleware/auth');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const NotFoundError = require('./errors/not-found-error');
+const middlewareErorr = require('./middleware/error');
 
 const { DATABASE_URL, NODE_ENV } = process.env;
 
@@ -35,22 +36,9 @@ app.use('*', (req, res, next) => {
 
 app.use(errorLogger); // подключаем логгер ошибок
 
+app.use(middlewareErorr);
+
 app.use(errors({ message: 'error validation' }));
-
-app.use((err, req, res, next) => {
-  // если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
-
-  res
-    .status(statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-  next();
-});
 
 app.listen(PORT, () => {
 
