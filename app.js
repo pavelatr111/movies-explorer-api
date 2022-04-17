@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const cors = require('cors');
 const auth = require('./middleware/auth');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const NotFoundError = require('./errors/not-found-error');
@@ -17,7 +18,11 @@ const { PORT = 3000 } = process.env;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// mongoose.connect('mongodb://localhost:27017/bitfilmsdb'
+app.use(cors({
+  origin: ['http://localhost:3001'],
+  credentials: true,
+}));
+
 mongoose.connect(NODE_ENV === 'production' ? DATABASE_URL : 'mongodb://localhost:27017/bitfilmsdb', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
