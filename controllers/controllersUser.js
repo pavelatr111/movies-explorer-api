@@ -13,7 +13,7 @@ module.exports.getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (user) {
-      res.status(200).send({ data: user });
+      res.status(200).send(user);
     } else {
       next(new NotFoundError('Нет пользователя с таким id'));
     }

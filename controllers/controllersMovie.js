@@ -1,3 +1,4 @@
+const { Types: { ObjectId } } = require('mongoose');
 const Movie = require('../models/modelsMovie');
 const DataError = require('../errors/error-data');
 const ForbiddenError = require('../errors/forbidden-error');
@@ -5,8 +6,8 @@ const NotFoundError = require('../errors/not-found-error');
 
 module.exports.getSaveMovie = async (req, res, next) => {
   try {
-    const movies = await Movie.find({});
-    res.status(200).send({ data: movies });
+    const movies = await Movie.find({ owner: req.user._id });
+    res.status(200).send(movies);
   } catch (err) {
     next(err);
   }
@@ -44,7 +45,7 @@ module.exports.createMovie = async (req, res, next) => {
 
 module.exports.deleteMovie = (req, res, next) => {
   const { Id } = req.params;
-  Movie.findById(Id).orFail(() => new NotFoundError('Нет фильма по такому id'))
+  Movie.findOne({ movieId: Id, owner: new ObjectId(req.user._id) }).orFail(() => new NotFoundError('Нет фильма по такому id'))
     .then((movie) => {
       if (movie.owner.toString() !== req.user._id) {
         return next(new ForbiddenError('Нельзя удалить фильм'));

@@ -37,7 +37,8 @@ router.post('/movies', celebrate({
 
 router.delete('/movies/:Id', celebrate({
   params: Joi.object().keys({
-    Id: Joi.string().length(24).hex().required(),
+    Id: Joi.number().greater(0).required()
+      .integer(),
   }),
 }), deleteMovie);
 
