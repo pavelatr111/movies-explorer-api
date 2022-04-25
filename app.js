@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: ['pavelpavlov.nomoredomains.xyz'],
+  origin: ['https://pavelpavlov.nomoredomains.xyz'],
   credentials: true,
 }));
 
