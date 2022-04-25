@@ -13,13 +13,13 @@ const middlewareErorr = require('./middleware/error');
 const { DATABASE_URL, NODE_ENV } = process.env;
 
 const app = express();
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['pavelpavlov.nomoredomains.xyz'],
   credentials: true,
 }));
 
