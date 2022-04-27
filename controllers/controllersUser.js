@@ -32,7 +32,7 @@ module.exports.updateUser = async (req, res, next) => {
       { new: true, sctric: true, runValidators: true },
     );
     if (userUpdate) {
-      res.status(200).send({ data: userUpdate });
+      res.status(200).send(userUpdate);
     } else {
       next(new NotFoundError('Нет пользователя с таким id'));
     }
